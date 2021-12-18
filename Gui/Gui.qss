@@ -1,0 +1,128 @@
+﻿/*global setting*/
+* {
+    font-family: "Microsoft YaHei";
+    font: bold;
+    font-size: 9pt;
+    color: #4e6d8c;
+    margin: 0px;
+    outline: 0;
+}
+
+/*remove the empty area in mainwindow*/
+QMainWindow::separator:horizontal {
+    height: 0px;
+    margin: 0px;
+}
+
+QMainWindow::separator:vertical {
+    width: 0px;
+    margin: 0px;
+}
+
+/*set the style of file viewer*/
+FileViewer > * {
+    border: 0px;
+}
+
+FileViewer > QLabel {
+    background: #dddddd;
+    height: 40px;
+    font-size: 12pt;
+    padding-left: 10px;
+}
+
+FileViewer > QComboBox {
+    background: #dddddd;
+    height: 40px;
+    font-size: 12pt;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-left: 2px solid #ffffff;
+}
+
+FileViewer > QComboBox:hover {
+    background: #aaaaaa;
+}
+
+FileViewer > QComboBox::drop-down {
+    width: 0px;
+    border: 0px;
+}
+
+FileViewer > QComboBox QAbstractItemView {
+    background: #ffffff;
+    padding-left: 2px;
+}
+
+FileViewer > QComboBox QAbstractItemView::item {
+    height: 30px;
+    font-size: 10pt;
+}
+
+FileViewer > QComboBox QAbstractItemView::item:selected {
+    background: #aaaaaa;
+    color: #eeeeee;
+}
+
+FileViewer > QTreeView {
+    background: #ffffff;
+}
+
+FileViewer > QTreeView:item {
+    height: 30px;
+}
+
+FileViewer > QTreeView::item:hover {
+    background: #dddddd;
+}
+
+FileViewer > QTreeView::item:selected {
+    background: #aaaaaa;
+    color: #eeeeee;
+}
+
+/*set the style of toolbutton to make it looks like a guider*/
+MenuToolBar {
+    background: #ffffff;
+    color: #4e6d8c;
+}
+
+MenuToolBar > QToolButton {
+    border: 0px;
+}
+
+MenuToolBar > QToolButton:hover {
+    background: #dddddd;
+}
+
+MenuToolBar > QToolButton:checked {
+    border-left: 3px solid #5d7c9b;
+    background: #aaaaaa;
+    color: #eeeeee;
+}
+
+/*set the style of dockwidget's title widget*/
+DockWidgetBar {
+    border: 0px;
+    border-top: 1px solid #dddddd;
+    background: #ffffff;
+    color: #4e6d8c;
+}
+
+DockWidgetBar > QToolButton {
+    border: 0px;
+}
+
+DockWidgetBar > QToolButton:hover {
+    background: #dddddd;
+}
+
+DockWidgetBar > QToolButton:checked {
+    background: #aaaaaa;
+    color: #eeeeee;
+}
+
+/*set the style of robot control widget*/
+RobotCtrlCenter QWidget {
+    background: #ffffff;
+}
