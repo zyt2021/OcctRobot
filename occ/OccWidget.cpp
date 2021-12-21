@@ -197,8 +197,8 @@ void OccWidget::mouseMoveEvent(QMouseEvent *event)
 
 void OccWidget::wheelEvent(QWheelEvent *event)
 {
-    myView->StartZoomAtPoint(event->pos().x(),event->pos().y());
-    myView->ZoomAtPoint(0, 0, event->angleDelta().y(), 0);
+    myView->StartZoomAtPoint(event->position().x(),event->position().y());
+    myView->ZoomAtPoint(0, 0, event->angleDelta().y()/5, 0);
 }
 
 QPaintEngine *OccWidget::paintEngine() const

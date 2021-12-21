@@ -5,10 +5,10 @@
 #include <QKeyEvent>
 
 class OccWidget;
-class Robot;
+//class Robot;
 class ModelImport;
-class RobotCreator;
-class RobotCtrlCenter;
+//class RobotCreator;
+//class RobotCtrlCenter;
 class QThread;
 class QTextEdit;
 class QStackedWidget;
@@ -41,9 +41,9 @@ private:
 
     ModelImport *myImportWork;
     OccWidget *myOccWidget;
-    RobotCreator *myRobotCreator;
-    Robot *myWorkRobot;
-    RobotCtrlCenter *myRobotCtrl;
+//    RobotCreator *myRobotCreator;
+//    Robot *myWorkRobot;
+//    RobotCtrlCenter *myRobotCtrl;
 
 signals:
     void requestImportModel(const QString &str);

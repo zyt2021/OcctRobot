@@ -3,12 +3,14 @@ Qt += opengl
 OCCTLIB_PATH = D:/OpenCasCade
 
 HEADERS += \
+    $$PWD/AIS_Coordinate.h \
     $$PWD/CafShapePrs.h \
     $$PWD/ModelImport.h \
     $$PWD/OccWidget.h \
     $$PWD/XCAFBroswer.h
 
 SOURCES += \
+    $$PWD/AIS_Coordinate.cpp \
     $$PWD/CafShapePrs.cpp \
     $$PWD/ModelImport.cpp \
     $$PWD/OccWidget.cpp \

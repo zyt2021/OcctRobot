@@ -9,14 +9,15 @@
 
 #include "occ/OccWidget.h"
 #include "occ/ModelImport.h"
-#include "robotics/Robot.h"
-#include "robotics/RobotLink.h"
-#include "robotics/RobotCreator.h"
+//#include "robotics/Robot.h"
+//#include "robotics/RobotLink.h"
+//#include "robotics/RobotCreator.h"
+#include "robotics/DHIndicater.h"
 #include "Tools/MyDebug.h"
 #include "MenuToolBar.h"
 #include "DockWidgetBar.h"
 #include "FileViewer.h"
-#include "RobotCtrlCenter.h"
+//#include "RobotCtrlCenter.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -24,10 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
       myGlobalInfo(nullptr),
       myImportThread(nullptr),
       myImportWork(nullptr),
-      myOccWidget(nullptr),
-      myRobotCreator(nullptr),
-      myWorkRobot(nullptr),
-      myRobotCtrl(nullptr)
+      myOccWidget(nullptr)
+//      myRobotCreator(nullptr),
+//      myWorkRobot(nullptr),
+//      myRobotCtrl(nullptr)
 {
     InitDock();
     InitView();
@@ -52,16 +53,16 @@ MainWindow::~MainWindow()
         delete myOccWidget;
     }
 
-    if(myRobotCreator) {
-        if(myRobotCreator->isRunning()) {
-            myRobotCreator->quit();
-            myRobotCreator->wait();
-        }
-        delete myRobotCreator;
-    }
+//    if(myRobotCreator) {
+//        if(myRobotCreator->isRunning()) {
+//            myRobotCreator->quit();
+//            myRobotCreator->wait();
+//        }
+//        delete myRobotCreator;
+//    }
 
-    if(myWorkRobot)
-        delete myWorkRobot;
+//    if(myWorkRobot)
+//        delete myWorkRobot;
 }
 
 void MainWindow::InitDock()
@@ -78,7 +79,16 @@ void MainWindow::InitDock()
         myCenterStack->setCurrentIndex(0);
     });
     connect(MenuToolBar::Instance(),&MenuToolBar::requestCtrlCenter,this,[=](bool show) {
-        myRobotCtrl->setVisible(show);
+//        myRobotCtrl->setVisible(show);
+    });
+    connect(MenuToolBar::Instance(),&MenuToolBar::requestTest,this,[=]() {
+        DHIndicater anIndicater;
+        anIndicater.ComputeFK();
+        QVector<Handle(AIS_Coordinate)> coords = anIndicater.GetIndicaters();
+        for(int i=0;i<coords.size();++i) {
+            myOccWidget->GetContext()->Display(coords[i],Standard_True);
+        }
+        myOccWidget->GetView()->FitAll();
     });
 
     // 2.set the output info textedit
@@ -126,20 +136,20 @@ void MainWindow::InitView()
     connect(aViewer,&FileViewer::requestImportRobot,this,&MainWindow::onImportRobot);
 
     // 4.init the control widget of robot
-    myRobotCtrl = new RobotCtrlCenter(myOccWidget);
-    myRobotCtrl->move(20,20);
-    myRobotCtrl->hide();
-    connect(myRobotCtrl,&RobotCtrlCenter::requestForwardKinematic,this,[=](const QList<int> &vals) {
-        if(myWorkRobot) {
-            myWorkRobot->PerformFK({static_cast<double>(vals[0]),
-                                    static_cast<double>(vals[1]),
-                                    static_cast<double>(vals[2]),
-                                    static_cast<double>(vals[3]),
-                                    static_cast<double>(vals[4]),
-                                    static_cast<double>(vals[5])});
-            myOccWidget->GetView()->Update();
-        }
-    });
+//    myRobotCtrl = new RobotCtrlCenter(myOccWidget);
+//    myRobotCtrl->move(20,20);
+//    myRobotCtrl->hide();
+//    connect(myRobotCtrl,&RobotCtrlCenter::requestForwardKinematic,this,[=](const QList<int> &vals) {
+//        if(myWorkRobot) {
+//            myWorkRobot->PerformFK({static_cast<double>(vals[0]),
+//                                    static_cast<double>(vals[1]),
+//                                    static_cast<double>(vals[2]),
+//                                    static_cast<double>(vals[3]),
+//                                    static_cast<double>(vals[4]),
+//                                    static_cast<double>(vals[5])});
+//            myOccWidget->GetView()->Update();
+//        }
+//    });
 
     // set the central widget and show
     this->setCentralWidget(myCenterStack);
@@ -169,8 +179,8 @@ void MainWindow::InitFuncs()
     });
 
     // 2. init the robot creating thread
-    myRobotCreator = new RobotCreator;
-    connect(myRobotCreator,&RobotCreator::createFinish,this,&MainWindow::onRobotCreateFinish);
+//    myRobotCreator = new RobotCreator;
+//    connect(myRobotCreator,&RobotCreator::createFinish,this,&MainWindow::onRobotCreateFinish);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -198,45 +208,45 @@ void MainWindow::onImportCAD(const QString &str)
 
 void MainWindow::onImportRobot(const QString &str)
 {
-    if(myWorkRobot) {
-        QList<RobotLink*> links = myWorkRobot->GetLinks();
-        foreach(RobotLink* aLink, links) {
-            foreach(Handle(AIS_ConnectedInteractive) obj, aLink->Shapes()) {
-                myOccWidget->GetContext()->Remove(obj,Standard_False);
-            }
-        }
+//    if(myWorkRobot) {
+//        QList<RobotLink*> links = myWorkRobot->GetLinks();
+//        foreach(RobotLink* aLink, links) {
+//            foreach(Handle(AIS_ConnectedInteractive) obj, aLink->Shapes()) {
+//                myOccWidget->GetContext()->Remove(obj,Standard_False);
+//            }
+//        }
 
-        delete myWorkRobot;
-        myWorkRobot = nullptr;
-    }
+//        delete myWorkRobot;
+//        myWorkRobot = nullptr;
+//    }
 
-    myWorkRobot = new Robot;
-    myRobotCreator->SetJsonPath(str);
-    myRobotCreator->SetInput(myWorkRobot);
-    myRobotCreator->start();
+//    myWorkRobot = new Robot;
+//    myRobotCreator->SetJsonPath(str);
+//    myRobotCreator->SetInput(myWorkRobot);
+//    myRobotCreator->start();
 }
 
 void MainWindow::onRobotCreateFinish()
 {
-    if(!myWorkRobot) {
-        return;
-    }
+//    if(!myWorkRobot) {
+//        return;
+//    }
 
-    if(myRobotCtrl) {
-        myRobotCtrl->InitValues(myWorkRobot);
-    }
+//    if(myRobotCtrl) {
+//        myRobotCtrl->InitValues(myWorkRobot);
+//    }
 
-    myWorkRobot->PerformFK({0,0,0,0,0,0});
+//    myWorkRobot->PerformFK({0,0,0,0,0,0});
 
-    QList<RobotLink*> links = myWorkRobot->GetLinks();
-    foreach(RobotLink* aLink, links) {
-        foreach(Handle(AIS_ConnectedInteractive) obj, aLink->Shapes()) {
-            myOccWidget->GetContext()->Display(obj,Standard_False);
-            myOccWidget->GetContext()->Deactivate(obj);
-            qApp->processEvents();
-        }
-    }
-    myOccWidget->GetView()->FitAll();
+//    QList<RobotLink*> links = myWorkRobot->GetLinks();
+//    foreach(RobotLink* aLink, links) {
+//        foreach(Handle(AIS_ConnectedInteractive) obj, aLink->Shapes()) {
+//            myOccWidget->GetContext()->Display(obj,Standard_False);
+//            myOccWidget->GetContext()->Deactivate(obj);
+//            qApp->processEvents();
+//        }
+//    }
+//    myOccWidget->GetView()->FitAll();
 }
 
 void MainWindow::onSaveOutput()

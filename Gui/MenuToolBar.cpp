@@ -51,11 +51,19 @@ void MenuToolBar::initStyle()
     ctrlBtn->setCheckable(true);
     Instance()->addWidget(ctrlBtn);
 
+    QToolButton* testBtn = new QToolButton(Instance());
+    testBtn->setText(tr("Test"));
+    testBtn->setIcon(QIcon(":/icons/plus.png"));
+    testBtn->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    testBtn->setFixedSize(widP/10,widP/10);
+    testBtn->setCheckable(true);
+    Instance()->addWidget(testBtn);
+
     // 3.connect the signals
     connect(importBtn,&QToolButton::clicked,Instance(),[=](bool checked) {
         if(checked) {
             viewBtn->setChecked(false);
-            Instance()->requestImport();
+            emit Instance()->requestImport();
         }
         else {
             importBtn->setChecked(true); // can't be unchecked by itself
@@ -64,17 +72,20 @@ void MenuToolBar::initStyle()
     connect(viewBtn,&QToolButton::clicked,Instance(),[=](bool checked) {
         if(checked) {
             importBtn->setChecked(false);
-            Instance()->requestOccView();
+            emit Instance()->requestOccView();
         }
         else {
             viewBtn->setChecked(true);
         }
     });
     connect(ctrlBtn,&QToolButton::clicked,Instance(),[=](bool checked) {
-        Instance()->requestCtrlCenter(checked);        
+        emit Instance()->requestCtrlCenter(checked);
         if(checked) {
             viewBtn->click();
         }
+    });
+    connect(testBtn,&QToolButton::clicked,Instance(),[=](bool checked) {
+        emit Instance()->requestTest();
     });
 }
 
