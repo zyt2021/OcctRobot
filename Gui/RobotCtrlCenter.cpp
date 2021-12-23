@@ -21,11 +21,9 @@ RobotCtrlCenter::~RobotCtrlCenter()
 
 void RobotCtrlCenter::InitValues(const Robot *robot)
 {
-    QList<double> minpos = robot->GetAxisMin();
-    QList<double> maxpos = robot->GetAxisMax();
-    if(minpos.size() != 6) {
-        qWarning()<<tr("The number of controler doesn't match robot's dof! ");;
-    }
+    QList<double> minpos = {-180,-180,-180,-180,-180,-180};
+    QList<double> maxpos = {180,180,180,180,180,180};
+
     ui->horizontalSlider_baseValue->setRange(minpos[0],maxpos[0]);
     ui->horizontalSlider_shoulderValue->setRange(minpos[1],maxpos[1]);
     ui->horizontalSlider_elbowValue->setRange(minpos[2],maxpos[2]);

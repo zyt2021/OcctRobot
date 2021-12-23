@@ -85,7 +85,7 @@ void MenuToolBar::initStyle()
         }
     });
     connect(testBtn,&QToolButton::clicked,Instance(),[=](bool checked) {
-        emit Instance()->requestTest();
+        emit Instance()->requestTest(checked);
     });
 }
 

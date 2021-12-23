@@ -126,3 +126,6 @@ DockWidgetBar > QToolButton:checked {
 RobotCtrlCenter QWidget {
     background: #ffffff;
 }
+DHSettingWidget QWidget {
+    background: #ffffff;
+}

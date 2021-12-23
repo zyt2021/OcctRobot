@@ -5,13 +5,14 @@
 #include <QKeyEvent>
 
 class OccWidget;
-//class Robot;
+class Robot;
 class ModelImport;
-//class RobotCreator;
-//class RobotCtrlCenter;
+class RobotCreator;
+class RobotCtrlCenter;
 class QThread;
 class QTextEdit;
 class QStackedWidget;
+class DHSettingWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -41,9 +42,10 @@ private:
 
     ModelImport *myImportWork;
     OccWidget *myOccWidget;
-//    RobotCreator *myRobotCreator;
-//    Robot *myWorkRobot;
-//    RobotCtrlCenter *myRobotCtrl;
+    RobotCreator *myRobotCreator;
+    Robot *myWorkRobot;
+    RobotCtrlCenter *myRobotCtrl;
+    DHSettingWidget *myDHSet;
 
 signals:
     void requestImportModel(const QString &str);

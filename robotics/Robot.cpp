@@ -18,43 +18,33 @@ Robot::~Robot()
 }
 
 // robot forward kinematic
-void Robot::PerformFK(const QList<double> &angs)
+void Robot::PerformFK(const QVector<double> &angs)
 {
     Q_ASSERT(angs.size() == RDOF);
 
+    if(RDHData.isEmpty())
+        return;
+
     RTCP = gp_Pnt(0,0,0);
-    gp_Trsf CumulativeTrsf;//set an Cumulative Trsf to change the axis after the current one
-    for(int i=0;i<RMotionAxis.size();++i)
-    {
-        gp_Trsf aTrsf;
+    gp_Trsf apply;
+    for(int i=0;i<RDHData.size()-1;++i) {
+        DHArg dh = RDHData[i];
+        gp_Trsf cvt;
+        double theta = dh.theta+angs[i]*M_PI/180; double d = dh.d; double alpha = dh.alpha; double a = dh.a;
+        cvt.SetValues(cos(theta), -sin(theta)*cos(alpha), sin(theta)*sin(alpha), a*cos(theta),
+                      sin(theta), cos(theta)*cos(alpha), -cos(theta)*sin(alpha), a*sin(theta),
+                      0, sin(alpha), cos(alpha), d);
 
-        double motionVal = qBound(RMinPos[i],angs[i],RMaxPos[i]);
-
-        if(RAxisRotate[i]) {
-            aTrsf.SetRotation(RMotionAxis[i],motionVal*M_PI/180);
-        }
-        else {
-            aTrsf.SetTranslation(gp_Vec(RMotionAxis[i].Direction())*motionVal);
-        }
-
-        CumulativeTrsf.Multiply(aTrsf);
-
-        gp_Trsf workTrsf;//the real work Trsf ,E * Cumulative * Assemble
-        workTrsf.Multiply(CumulativeTrsf);
-        workTrsf.Multiply(RAssembelTrsfs[i]);
-
-        //when u change here ,u needn't to display them again in the main function, update the occWidget is enough
-        RLinks[i+1]->ApplyTrsf(workTrsf);
+        apply.Multiply(cvt);
+        RLinks[i+1]->ApplyTrsf(apply);
     }
 
-    gp_Trsf aTrsf;
-    aTrsf.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),0);
-
-    CumulativeTrsf.Multiply(aTrsf);
-
-    gp_Trsf workTrsf;
-    workTrsf.Multiply(CumulativeTrsf);
-    workTrsf.Multiply(RTCPTrsf);
-
-    RTCP.Transform(workTrsf);
+    gp_Trsf tcp;
+    DHArg dh = RDHData.last();
+    double theta = dh.theta; double d = dh.d; double alpha = dh.alpha; double a = dh.a;
+    tcp.SetValues(cos(theta), -sin(theta)*cos(alpha), sin(theta)*sin(alpha), a*cos(theta),
+                  sin(theta), cos(theta)*cos(alpha), -cos(theta)*sin(alpha), a*sin(theta),
+                  0, sin(alpha), cos(alpha), d);
+    apply.Multiply(tcp);
+    RTCP.Transform(apply);
 }

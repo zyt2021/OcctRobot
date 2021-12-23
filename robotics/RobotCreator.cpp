@@ -58,7 +58,7 @@ void RobotCreator::LoadJson(const QString &fileName)
     myInputRobot->SetRobotName(jsonObject["Name"].toString());
 
     // 3.shape files' paths
-    QList<RobotLink*> list;
+    QVector<RobotLink*> list;
     if (jsonObject.contains("Shapes")) {
         QJsonValue arrayValue = jsonObject.value("Shapes");
         if (arrayValue.isArray()) {
@@ -101,99 +101,43 @@ void RobotCreator::LoadJson(const QString &fileName)
     }
     myInputRobot->SetLinkShapes(list);
 
-    // 4.transformation of each link
-    QList<gp_Trsf> assembly;
-    if (jsonObject.contains("Transforms")) {
-        QJsonValue arrayValue = jsonObject.value("Transforms");
+    // 4.DH arguments of each link
+    QVector<DHArg> dhArgs;
+    if (jsonObject.contains("DH")) {
+        QJsonValue arrayValue = jsonObject.value("DH");
         if (arrayValue.isArray()) {
             QJsonArray array = arrayValue.toArray();
             for (int i = 0; i < array.size(); i++) {
                 QJsonValue TrsfArray = array.at(i);
                 QJsonObject trsf = TrsfArray.toObject();
-                qInfo()<<"x:"<<trsf["x"].toDouble();
-                qInfo()<<"y:"<<trsf["y"].toDouble();
-                qInfo()<<"z:"<<trsf["z"].toDouble();
+                qInfo()<<"theta:"<<trsf["theta"].toDouble()
+                      <<"d:"<<trsf["d"].toDouble()
+                     <<"alpha:"<<trsf["alpha"].toDouble()
+                    <<"a:"<<trsf["a"].toDouble();
 
-                gp_Trsf aTrsf;
-                aTrsf.SetTranslationPart({trsf["x"].toDouble(),
-                                          trsf["y"].toDouble(),
-                                          trsf["z"].toDouble()});
-                assembly.append(aTrsf);
+                dhArgs.append({trsf["theta"].toDouble()*M_PI/180.0,
+                              trsf["d"].toDouble(),
+                              trsf["alpha"].toDouble()*M_PI/180.0,
+                              trsf["a"].toDouble()});
             }
         }
     }
-    myInputRobot->SetAssembel(assembly);
 
     // 5.TCP transformation
-    gp_Trsf tcpTrsf;
-    if (jsonObject.contains("TCPTransform")) {
-        QJsonValue tcpValue = jsonObject.value("TCPTransform");
+    if (jsonObject.contains("TCP")) {
+        QJsonValue tcpValue = jsonObject.value("TCP");
         QJsonObject tcp = tcpValue.toObject();
-        qInfo()<<"x:"<<tcp["x"].toDouble();
-        qInfo()<<"y:"<<tcp["y"].toDouble();
-        qInfo()<<"z:"<<tcp["z"].toDouble();
+        qInfo()<<"theta:"<<tcp["theta"].toDouble()
+              <<"d:"<<tcp["d"].toDouble()
+             <<"alpha:"<<tcp["alpha"].toDouble()
+            <<"a:"<<tcp["a"].toDouble();
 
-        tcpTrsf.SetTranslationPart({tcp["x"].toDouble(),
-                                    tcp["y"].toDouble(),
-                                    tcp["z"].toDouble()});
+        dhArgs.append({tcp["theta"].toDouble()*M_PI/180.0,
+                       tcp["d"].toDouble(),
+                       tcp["alpha"].toDouble()*M_PI/180.0,
+                       tcp["a"].toDouble()});
     }
-    myInputRobot->SetTCPTrsf(tcpTrsf);
-
-    // 6.motion axis of each joint
-    QList<gp_Ax1> axes;
-    QList<bool> types;
-    QList<double> max;
-    QList<double> min;
-    if (jsonObject.contains("Axes")) {
-        QJsonValue arrayValue = jsonObject.value("Axes");
-        if (arrayValue.isArray()) {
-            QJsonArray array = arrayValue.toArray();
-            for (int i = 0; i < array.size(); i++) {
-                QJsonValue axisArray = array.at(i);
-                QJsonObject axis = axisArray.toObject();
-                qInfo()<<"x:"<<axis["x"].toDouble();
-                qInfo()<<"y:"<<axis["y"].toDouble();
-                qInfo()<<"z:"<<axis["z"].toDouble();
-                qInfo()<<"type:"<<axis["type"].toString();
-                qInfo()<<"max:"<<axis["max"].toDouble();
-                qInfo()<<"min:"<<axis["min"].toDouble();
-
-                // axis
-                gp_Ax1 ax1(gp_Pnt(assembly[i].TranslationPart()),{axis["x"].toDouble(),
-                                                                  axis["y"].toDouble(),
-                                                                  axis["z"].toDouble()});
-                axes.append(ax1);
-
-                // type
-                if(axis["type"].toString() == "rotate") {
-                    types.append(true);
-                }
-                else if(axis["type"].toString() == "translate") {
-                    types.append(false);
-                }
-                else {
-                    qCritical()<< QObject::tr("Wrong description of axis type!");
-                    return;
-                }
-
-                // position limitation
-                double maxV = axis["max"].toDouble();
-                double minV = axis["min"].toDouble();
-                if(maxV<minV) {
-                    qCritical()<< QObject::tr("Wrong limitation of axis position!");
-                    return;
-                }
-                else {
-                    max.append(maxV);
-                    min.append(minV);
-                }
-            }
-        }
-    }
-    myInputRobot->SetMotionAxis(axes);
-    myInputRobot->SetAxisRotate(types);
-    myInputRobot->SetAxisMaxPos(max);
-    myInputRobot->SetAxisMinPos(min);
+    myInputRobot->SetDHData(dhArgs);
 
     emit createFinish();
 }

@@ -1,26 +1,33 @@
 #include "DHIndicater.h"
 #include <QDebug>
+#include <QMutex>
+
+DHIndicater* DHIndicater::ptrSelf = nullptr;
+QVector<DHARG> DHIndicater::myDHData = {};
+QVector<Handle(AIS_Coordinate)> DHIndicater::myDHCoord = {};
 
 DHIndicater::DHIndicater()
-    : myDHData({
-                {0, 214, 0, 0},
-                {0, 116, M_PI_2, -40},
-                {M_PI_2, 0, 0, 345},
-                {0, 0, -M_PI_2, 40},
-                {0, 340, M_PI_2, 0},
-                {M_PI, 0, M_PI_2, 0},
-                {0, 221, 0, 61}
-               })
 {
-    for(int i=0;i<myDHData.size()+1;++i) {
-        Handle(AIS_Coordinate) aCoord = new AIS_Coordinate;
-        aCoord->SetNumber(i);
-        myDHCoord.append(aCoord);
+}
+
+DHIndicater *DHIndicater::Instance()
+{
+    if(!ptrSelf) {
+        static QMutex muter;
+        QMutexLocker clocker(&muter);
+
+        if(!ptrSelf) {
+            ptrSelf = new DHIndicater();
+        }
     }
+    return ptrSelf;
 }
 
 void DHIndicater::ComputeFK()
 {
+    if(myDHData.isEmpty())
+        return;
+
     gp_Trsf apply;
     for(int i=0;i<myDHData.size();++i) {
         DHARG dh = myDHData[i];
@@ -32,5 +39,18 @@ void DHIndicater::ComputeFK()
 
         apply.Multiply(cvt);
         myDHCoord[i+1]->SetLocalTransformation(apply);
+    }
+}
+
+void DHIndicater::SetDHData(const QVector<DHARG> &data)
+{
+    myDHData = data;
+    if(myDHCoord.size() != myDHData.size()+1) {
+        myDHCoord.clear();
+        for(int i=0;i<myDHData.size()+1;++i) {
+            Handle(AIS_Coordinate) aCoord = new AIS_Coordinate;
+            aCoord->SetNumber(i);
+            myDHCoord.append(aCoord);
+        }
     }
 }

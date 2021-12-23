@@ -9,13 +9,13 @@
             "Path":"E:\\QtCode\\OCCTRobot\\bin\\gp8\\link1.iges"
         },
         {
-            "Path":"E:\\QtCode\\OCCTRobot\\bin\\gp8\\link2.IGS"
+            "Path":"E:\\QtCode\\OCCTRobot\\bin\\gp8\\link2.iges"
         },
         {
             "Path":"E:\\QtCode\\OCCTRobot\\bin\\gp8\\link3.iges"
         },
         {
-            "Path":"E:\\QtCode\\OCCTRobot\\bin\\gp8\\link4.IGS"
+            "Path":"E:\\QtCode\\OCCTRobot\\bin\\gp8\\link4.iges"
         },
         {
             "Path":"E:\\QtCode\\OCCTRobot\\bin\\gp8\\link5.iges"
@@ -24,91 +24,48 @@
             "Path":"E:\\QtCode\\OCCTRobot\\bin\\gp8\\link6.iges"
         }
     ],
-    "Transforms":[
+    "DH":[
         {
-            "x":0,
-            "y":0,
-            "z":214
+            "theta":0,
+            "d":214,
+            "alpha":0,
+			"a":0
         },
         {
-            "x":-40,
-            "y":0,
-            "z":330
+            "theta":0,
+            "d":116,
+            "alpha":90,
+			"a":40
         },
         {
-            "x":-40,
-            "y":0,
-            "z":675
+            "theta":90,
+            "d":0,
+            "alpha":0,
+			"a":345
         },
         {
-            "x":-111.5,
-            "y":0,
-            "z":715
+            "theta":0,
+            "d":0,
+            "alpha":90,
+			"a":40
         },
         {
-            "x":-380,
-            "y":0,
-            "z":715
+            "theta":0,
+            "d":340,
+            "alpha":90,
+			"a":0
         },
         {
-            "x":-445,
-            "y":0,
-            "z":715
+            "theta":180,
+            "d":0,
+            "alpha":90,
+			"a":0
         }
     ],
-    "TCPTransform":{
-        "x":-667,
-        "y":0,
-        "z":654
-    },
-    "Axes":[
-        {
-            "x":0,
-            "y":0,
-            "z":1,
-            "type":"rotate",
-			"max":170,
-			"min":-170
-        },
-        {
-            "x":0,
-            "y":-1,
-            "z":0,
-            "type":"rotate",
-			"max":65,
-			"min":-145
-        },
-        {
-            "x":0,
-            "y":-1,
-            "z":0,
-            "type":"rotate",
-			"max":255,
-			"min":-113
-        },
-        {
-            "x":-1,
-            "y":0,
-            "z":0,
-            "type":"rotate",
-			"max":190,
-			"min":-190
-        },
-        {
-            "x":0,
-            "y":-1,
-            "z":0,
-            "type":"rotate",
-			"max":135,
-			"min":-135
-        },
-        {
-            "x":-1,
-            "y":0,
-            "z":0,
-            "type":"rotate",
-			"max":360,
-			"min":-360
-        }
-    ]
+    "TCP":{
+		"theta":0,
+        "d":211,
+        "alpha":0,
+		"a":61
+    }
 }

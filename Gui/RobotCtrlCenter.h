@@ -31,7 +31,7 @@ private:
     Ui::RobotCtrlCenter *ui;
 
 signals:
-    void requestForwardKinematic(const QList<int> &vals);
+    void requestForwardKinematic(const QVector<int> &vals);
 };
 
 #endif // ROBOTCTRLCENTER_H

@@ -31,7 +31,7 @@ signals:
     void requestImport();
     void requestOccView();
     void requestCtrlCenter(bool show);
-    void requestTest();
+    void requestTest(bool show);
 };
 
 #endif // MENUTOOLBAR_H

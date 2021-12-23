@@ -17,8 +17,7 @@ struct DHARG
 class DHIndicater
 {
 public:
-    DHIndicater();
-
+    static DHIndicater* Instance();
     //! compute the coordinates of DH with the arguments of
     //! it. The calculation formula is
     //!
@@ -35,15 +34,29 @@ public:
     //! the gp_Trsf class has hide the row (0,0,0,1), but
     //! use it in default when calculating, and the
     //! gp_Trsf::TranslationPart is the coordinate value
-    void ComputeFK();
+    static void ComputeFK();
 
-    QVector<Handle(AIS_Coordinate)> GetIndicaters() const {
+    static void SetDHData(const QVector<DHARG>& data);
+
+    static QVector<Handle(AIS_Coordinate)> GetIndicaters() {
         return myDHCoord;
     }
 
 private:
-    QVector<DHARG> myDHData;
-    QVector<Handle(AIS_Coordinate)> myDHCoord;
+    DHIndicater();
+    class CGabor
+    {
+    public:
+        ~CGabor(){
+            if (DHIndicater::ptrSelf){
+                delete DHIndicater::ptrSelf;
+                DHIndicater::ptrSelf = nullptr;
+            }
+        }
+    };
+    static DHIndicater* ptrSelf;
+    static QVector<DHARG> myDHData;
+    static QVector<Handle(AIS_Coordinate)> myDHCoord;
 };
 
 #endif // DHINDICATER_H
