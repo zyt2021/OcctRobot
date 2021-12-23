@@ -241,10 +241,10 @@ void MainWindow::onRobotCreateFinish()
     }
 
     if(myRobotCtrl) {
-//        myRobotCtrl->InitValues(myWorkRobot);
+        myRobotCtrl->InitValues(myWorkRobot);
     }
 
-    myWorkRobot->PerformFK({30,30,30,30,30,30});
+    myWorkRobot->PerformFK({0,0,0,0,0,0});
 
     QVector<RobotLink*> links = myWorkRobot->GetLinks();
     foreach(RobotLink* aLink, links) {

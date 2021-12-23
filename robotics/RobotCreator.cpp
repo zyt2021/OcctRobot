@@ -9,6 +9,7 @@
 #include "Robot.h"
 #include "RobotLink.h"
 #include "occ/ModelImport.h"
+#include "occ/AIS_Coordinate.h"
 
 #include <QDebug>
 
@@ -67,35 +68,40 @@ void RobotCreator::LoadJson(const QString &fileName)
                 QJsonValue pathArray = array.at(i);
                 QJsonObject path = pathArray.toObject();
                 RobotLink *aLink = new RobotLink;
+                Handle(AIS_Coordinate) acd = new AIS_Coordinate;
+                Handle(AIS_ConnectedInteractive) obj = new AIS_ConnectedInteractive();
+                obj->Connect(acd);
+                aLink->RShapes = {obj};
+                list.append(aLink);
                 qInfo()<<"Path:"<<path["Path"].toString();
 
-                QFileInfo aInfo(path["Path"].toString());
+//                QFileInfo aInfo(path["Path"].toString());
 
-                bool ret = false;
-                if(aInfo.isFile()) {
-                    if(aInfo.suffix().toLower() == "step" || aInfo.suffix().toLower() == "stp") {
-                        ret = ModelImport::importSTEP(path["Path"].toString(),aLink->RShapes);
-                    }
-                    else if(aInfo.suffix().toLower() == "iges" || aInfo.suffix().toLower() == "igs") {
-                        ret = ModelImport::importIGES(path["Path"].toString(),aLink->RShapes);
-                    }
-                    else {
-                        qCritical()<< QObject::tr("The format of robot shape file is unsupported!");
-                        return;
-                    }
-                }
-                else {
-                    qCritical()<< QObject::tr("The element %1 is not a file!").arg(path["Path"].toString());
-                    return;
-                }
+//                bool ret = false;
+//                if(aInfo.isFile()) {
+//                    if(aInfo.suffix().toLower() == "step" || aInfo.suffix().toLower() == "stp") {
+//                        ret = ModelImport::importSTEP(path["Path"].toString(),aLink->RShapes);
+//                    }
+//                    else if(aInfo.suffix().toLower() == "iges" || aInfo.suffix().toLower() == "igs") {
+//                        ret = ModelImport::importIGES(path["Path"].toString(),aLink->RShapes);
+//                    }
+//                    else {
+//                        qCritical()<< QObject::tr("The format of robot shape file is unsupported!");
+//                        return;
+//                    }
+//                }
+//                else {
+//                    qCritical()<< QObject::tr("The element %1 is not a file!").arg(path["Path"].toString());
+//                    return;
+//                }
 
-                if(!ret) {
-                    qCritical()<< QObject::tr("Error while import robot shapes!");
-                    return;
-                }
-                else {
-                    list.append(aLink);
-                }
+//                if(!ret) {
+//                    qCritical()<< QObject::tr("Error while import robot shapes!");
+//                    return;
+//                }
+//                else {
+//                    list.append(aLink);
+//                }
             }
         }
     }

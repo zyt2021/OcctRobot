@@ -67,6 +67,8 @@ private:
     QVector<DHArg> RDHData;
 
     gp_Pnt RTCP;
+
+    gp_Trsf dhToTrsf(const DHArg& arg, double rad);
 };
 
 #endif // ROBOT_H
