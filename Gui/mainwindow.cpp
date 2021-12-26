@@ -17,7 +17,6 @@
 #include "DockWidgetBar.h"
 #include "FileViewer.h"
 #include "RobotCtrlCenter.h"
-#include "DHSettingWidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -28,8 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
       myOccWidget(nullptr),
       myRobotCreator(nullptr),
       myWorkRobot(nullptr),
-      myRobotCtrl(nullptr),
-      myDHSet(nullptr)
+      myRobotCtrl(nullptr)
 {
     InitDock();
     InitView();
@@ -83,7 +81,6 @@ void MainWindow::InitDock()
         myRobotCtrl->setVisible(show);
     });
     connect(MenuToolBar::Instance(),&MenuToolBar::requestTest,this,[=](bool show) {
-        myDHSet->setVisible(show);
     });
 
     // 2.set the output info textedit
@@ -144,19 +141,6 @@ void MainWindow::InitView()
                                     static_cast<double>(vals[5])});
             myOccWidget->GetView()->Update();
         }
-    });
-
-    // 5.DH setting widget
-    myDHSet = new DHSettingWidget(myOccWidget);
-    myDHSet->move(20,20);
-    myDHSet->hide();
-    connect(myDHSet,&DHSettingWidget::requestShow,this,[=]() {
-        DHIndicater::ComputeFK();
-        QVector<Handle(AIS_Coordinate)> coords = DHIndicater::GetIndicaters();
-        for(int i=0;i<coords.size();++i) {
-            myOccWidget->GetContext()->Display(coords[i],Standard_True);
-        }
-        myOccWidget->GetView()->FitAll();
     });
 
     // set the central widget and show

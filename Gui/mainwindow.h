@@ -12,7 +12,6 @@ class RobotCtrlCenter;
 class QThread;
 class QTextEdit;
 class QStackedWidget;
-class DHSettingWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -45,7 +44,6 @@ private:
     RobotCreator *myRobotCreator;
     Robot *myWorkRobot;
     RobotCtrlCenter *myRobotCtrl;
-    DHSettingWidget *myDHSet;
 
 signals:
     void requestImportModel(const QString &str);

@@ -1,5 +1,4 @@
 HEADERS += \
-    $$PWD/DHSettingWidget.h \
     $$PWD/DockWidgetBar.h \
     $$PWD/FileViewer.h \
     $$PWD/MenuToolBar.h \
@@ -7,7 +6,6 @@ HEADERS += \
     $$PWD/mainwindow.h
 
 SOURCES += \
-    $$PWD/DHSettingWidget.cpp \
     $$PWD/DockWidgetBar.cpp \
     $$PWD/FileViewer.cpp \
     $$PWD/MenuToolBar.cpp \
@@ -18,6 +16,5 @@ RESOURCES += \
     $$PWD/Gui.qrc
 
 FORMS += \
-    $$PWD/DHSettingWidget.ui \
     $$PWD/FileViewer.ui \
     $$PWD/RobotCtrlCenter.ui

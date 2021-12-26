@@ -70,6 +70,7 @@ void RobotCreator::LoadJson(const QString &fileName)
                 RobotLink *aLink = new RobotLink;
                 Handle(AIS_Coordinate) acd = new AIS_Coordinate;
                 Handle(AIS_ConnectedInteractive) obj = new AIS_ConnectedInteractive();
+                acd->SetNumber(i);
                 obj->Connect(acd);
                 aLink->RShapes = {obj};
                 list.append(aLink);
