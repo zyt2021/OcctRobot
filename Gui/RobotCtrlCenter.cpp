@@ -21,8 +21,8 @@ RobotCtrlCenter::~RobotCtrlCenter()
 
 void RobotCtrlCenter::InitValues(const Robot *robot)
 {
-    QList<double> minpos = {-180,-180,-180,-180,-180,-180};
-    QList<double> maxpos = {180,180,180,180,180,180};
+    QVector<double> minpos = robot->GetMinPosition();
+    QVector<double> maxpos = robot->GetMaxPosition();
 
     ui->horizontalSlider_baseValue->setRange(minpos[0],maxpos[0]);
     ui->horizontalSlider_shoulderValue->setRange(minpos[1],maxpos[1]);
@@ -34,66 +34,48 @@ void RobotCtrlCenter::InitValues(const Robot *robot)
 
 void RobotCtrlCenter::on_horizontalSlider_baseValue_valueChanged(int value)
 {
-    int base = value;
-    int shoulder = ui->horizontalSlider_shoulderValue->value();
-    int elbow = ui->horizontalSlider_elbowValue->value();
-    int wrist = ui->horizontalSlider_wristValue->value();
-    int wristMid = ui->horizontalSlider_wristMidValue->value();
-    int wristLast = ui->horizontalSlider_wristLastValue->value();
-    emit requestForwardKinematic({base,shoulder,elbow,wrist,wristMid,wristLast});
+    Q_UNUSED(value)
+    anglesChanged();
 }
 
 void RobotCtrlCenter::on_horizontalSlider_shoulderValue_valueChanged(int value)
 {
-    int base = ui->horizontalSlider_baseValue->value();
-    int shoulder = value;
-    int elbow = ui->horizontalSlider_elbowValue->value();
-    int wrist = ui->horizontalSlider_wristValue->value();
-    int wristMid = ui->horizontalSlider_wristMidValue->value();
-    int wristLast = ui->horizontalSlider_wristLastValue->value();
-    emit requestForwardKinematic({base,shoulder,elbow,wrist,wristMid,wristLast});
+    Q_UNUSED(value)
+    anglesChanged();
 }
 
 void RobotCtrlCenter::on_horizontalSlider_elbowValue_valueChanged(int value)
 {
-    int base = ui->horizontalSlider_baseValue->value();
-    int shoulder = ui->horizontalSlider_shoulderValue->value();
-    int elbow = value;
-    int wrist = ui->horizontalSlider_wristValue->value();
-    int wristMid = ui->horizontalSlider_wristMidValue->value();
-    int wristLast = ui->horizontalSlider_wristLastValue->value();
-    emit requestForwardKinematic({base,shoulder,elbow,wrist,wristMid,wristLast});
+    Q_UNUSED(value)
+    anglesChanged();
 }
 
 void RobotCtrlCenter::on_horizontalSlider_wristValue_valueChanged(int value)
 {
-    int base = ui->horizontalSlider_baseValue->value();
-    int shoulder = ui->horizontalSlider_shoulderValue->value();
-    int elbow = ui->horizontalSlider_elbowValue->value();
-    int wrist = value;
-    int wristMid = ui->horizontalSlider_wristMidValue->value();
-    int wristLast = ui->horizontalSlider_wristLastValue->value();
-    emit requestForwardKinematic({base,shoulder,elbow,wrist,wristMid,wristLast});
+    Q_UNUSED(value)
+    anglesChanged();
 }
 
 void RobotCtrlCenter::on_horizontalSlider_wristMidValue_valueChanged(int value)
 {
-    int base = ui->horizontalSlider_baseValue->value();
-    int shoulder = ui->horizontalSlider_shoulderValue->value();
-    int elbow = ui->horizontalSlider_elbowValue->value();
-    int wrist = ui->horizontalSlider_wristValue->value();
-    int wristMid = value;
-    int wristLast = ui->horizontalSlider_wristLastValue->value();
-    emit requestForwardKinematic({base,shoulder,elbow,wrist,wristMid,wristLast});
+    Q_UNUSED(value)
+    anglesChanged();
 }
 
 void RobotCtrlCenter::on_horizontalSlider_wristLastValue_valueChanged(int value)
+{
+    Q_UNUSED(value)
+    anglesChanged();
+}
+
+void RobotCtrlCenter::anglesChanged()
 {
     int base = ui->horizontalSlider_baseValue->value();
     int shoulder = ui->horizontalSlider_shoulderValue->value();
     int elbow = ui->horizontalSlider_elbowValue->value();
     int wrist = ui->horizontalSlider_wristValue->value();
     int wristMid = ui->horizontalSlider_wristMidValue->value();
-    int wristLast = value;
+    int wristLast = ui->horizontalSlider_wristLastValue->value();
+
     emit requestForwardKinematic({base,shoulder,elbow,wrist,wristMid,wristLast});
 }

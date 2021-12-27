@@ -30,6 +30,8 @@ private slots:
 private:
     Ui::RobotCtrlCenter *ui;
 
+    void anglesChanged();
+
 signals:
     void requestForwardKinematic(const QVector<int> &vals);
 };

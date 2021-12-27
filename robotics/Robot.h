@@ -56,6 +56,19 @@ public:
         return RDHData;
     }
 
+    void SetMaxPosition(const QVector<double>& args) {
+        RMaxPos = args;
+    }
+    void SetMinPosition(const QVector<double>& args) {
+        RMinPos = args;
+    }
+    QVector<double> GetMaxPosition() const {
+        return RMaxPos;
+    }
+    QVector<double> GetMinPosition() const {
+        return RMinPos;
+    }
+
     void PerformFK(const QVector<double> &angs);
 
 private:
